@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zomato</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <script src="{{ url_for('static', path='script.js') }}"></script>
+    <style>
+        #zomato-logo {
+            height: 100px; /* Adjust height as needed */
+            width: 100%; /* Full width of its container */
+            background-color: rgb(243, 47, 47);
+            background-position: center;
+            background-image: url("{{ url_for('static', path='images/zomato-logo.png') }}");
+            background-size: contain; /* Adjust to 'cover' or 'contain' based on desired display */
+            /* background-position: center center; */
+            background-repeat: no-repeat; /* Ensure it doesn't repeat */
+            position: fixed;
+            z-index: 1000; /* Ensure logo stays above other content */
+        }
+
+    </style>
+</head>
+<body> 
+    <div id="zomato-logo"></div>
+
+    <div class="container">
+        <div id="restaurant-list" class="row"></div>
+        <nav>
+            <ul class="pagination" id="pagination"></ul>
+        </nav>
+    </div>
+   
+</body>
+</html>

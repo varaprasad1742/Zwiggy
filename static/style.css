@@ -1,0 +1,95 @@
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap onto new lines */
+    justify-content: space-around; /* Align items with space around */
+    align-items: flex-start; /* Align items to the top */
+
+    padding: 120px 20px 20px; /* Adjust top padding to accommodate fixed logo */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    min-height: 100vh; /* Ensure container takes full viewport height */
+}
+
+.restaurant-box {
+    flex: 0 0 calc(33.33% - 30px); /* Three boxes per row with margin */
+    margin: 15px;
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #fff; /* White background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+    transition: transform 0.2s;
+}
+
+@media (max-width: 992px) {
+    .restaurant-box {
+        flex: 0 0 calc(50% - 30px); /* Two boxes per row on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .restaurant-box {
+        flex: 0 0 100%; /* One box per row on small screens */
+    }
+}
+
+.restaurant-box:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly darker shadow on hover */
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.dot-available {
+    background-color: #28a745; /* Green dot */
+}
+
+.dot-not-available {
+    background-color: #dc3545; /* Red dot */
+}
+
+.dot-text {
+    position: absolute;
+    top: 8px;
+    right: 25px;
+    font-size: 12px;
+    color: #333;
+}
+
+.pagination {
+    justify-content: center;
+    margin-top: 20px; /* Space above pagination */
+}
+
+.page-item .page-link {
+    color: #080000; /* Red color for page links */
+    text-decoration: none; /* Remove underline */
+    background-color: transparent; /* Transparent background */
+    border: none; /* Remove border */
+    padding: 0.5rem 1rem; /* Padding for spacing */
+    transition: color 0.3s ease; /* Smooth color transition */
+    display: inline-block; /* Ensure inline display */
+}
+
+.page-item .page-link:hover {
+    color: #070000; /* Darker red color on hover */
+}
+
+.page-item.active .page-link {
+    background-color: transparent; /* Transparent background */
+    border: none; /* Remove border */
+    color: #0e0101; /* Darker red color for active link */
+    text-decoration: underline; /* Underline for active link */
+}
+
+.page-link.prev,
+.page-link.next {
+    color: #170102; /* Red color for arrows */
+    font-weight: bold; /* Bold font for arrows */
+}

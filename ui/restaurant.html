@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ restaurant.Restaurant_Name }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='style2.css') }}">
+
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card mt-5">
+                    <div class="card-header">
+                        <h2>{{ restaurant.Restaurant_Name }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Restaurant ID:</strong> {{ restaurant.id }}</p>
+                        <p><strong>Address:</strong> {{ restaurant.Address }}</p>
+                        <p><strong>Locality:</strong> {{ restaurant.Locality }}</p>
+                        <p><strong>Locality Verbose:</strong> {{ restaurant.Locality_Verbose }}</p>
+                        <p><strong>Cuisine:</strong> {{ restaurant.Cuisines }}</p>
+                        <p><strong>Average Cost for Two:</strong> {{ restaurant.Average_Cost_for_two }}</p>
+                        <p><strong>Has Table Booking:</strong> {{ restaurant.Has_Table_booking }}</p>
+                        <p><strong>Has Online Delivery:</strong> {{ restaurant.Has_Online_delivery }}</p>
+                        <p><strong>Is Delivering Now:</strong> {{ restaurant.Is_delivering_now }}</p>
+                        <p><strong>Price Range:</strong> {{ restaurant.Price_range }}</p>
+                        <p><strong>Aggregate Rating:</strong> {{ restaurant.Aggregate_rating }}</p>
+                        <p><strong>Rating Color:</strong> {{ restaurant.Rating_color }}</p>
+                        <p><strong>Rating Text:</strong> {{ restaurant.Rating_text }}</p>
+                        <p><strong>Votes:</strong> {{ restaurant.Votes }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
