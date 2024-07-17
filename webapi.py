@@ -33,6 +33,6 @@ async def restaurant(id: int, db=Depends(get_db)):
 async def all_restaurants(db=Depends(get_db)):
     result = db.execute(text("SELECT * FROM zomato"))
     restaurants = result.fetchall()
-    print(restaurants)
-    print(result)
-    return [dict(zip(result.keys(), restaurant)) for restaurant in restaurants[:50]]
+    # print(restaurants)
+    # print(result);
+    return [dict(zip(result.keys(), restaurant))["Restaurant_Name"] for restaurant in restaurants]
