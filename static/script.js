@@ -67,7 +67,7 @@ function displayRestaurants(restaurants) {
                 window.location.href = `/restaurant_id/${restaurant.id}`;
             });
             restaurantList.appendChild(restaurantDiv);
-        }, index * 100); // Adjust timing for smoother effect
+        }, index * 10); // Adjust timing for smoother effect
     });
 }
 

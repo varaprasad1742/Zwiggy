@@ -7,7 +7,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 
-engine = create_engine("mysql+pymysql://root:password@localhost/TypeFace") # pymysql is the driver to connect mysql
+engine = create_engine("mysql+pymysql://root:password@localhost:3306/TypeFace") # pymysql is the driver to connect mysql
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine) # sessionmaker is a factory for making session classes
 db = scoped_session(SessionLocal) # scoped_session is a thread-local object that represents a registry of database sessions
 
@@ -15,7 +15,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust according to your requirements
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -62,7 +62,7 @@ async def all_restaurants(page: int = Query(1, ge=1), db=Depends(get_db)):
 async def search_restaurants(query: str = Query(...), db=Depends(get_db)):
     try:
         result = db.execute(
-            text("SELECT id, Restaurant_Name, Aggregate_rating FROM zomato WHERE Restaurant_Name LIKE :query LIMIT 5"),
+            text("SELECT id, Restaurant_Name, Aggregate_rating FROM zomato WHERE Restaurant_Name LIKE :query LIMIT 8"),
             {"query": f"{query}%"} # % is a wildcard character in MySQL
         )
         restaurants = result.fetchall()
@@ -77,3 +77,10 @@ async def restaurants_count(db=Depends(get_db)):
     result = db.execute(text("SELECT COUNT(*) FROM zomato"))
     count = result.scalar()
     return {"count": count}
+
+
+@app.get("/random_restaurant")
+async def random_restaurant(db=Depends(get_db)):
+    result = db.execute(text("SELECT * FROM zomato ORDER BY RAND() LIMIT 1"))
+    restaurant = result.fetchone()
+    return dict(zip(result.keys(), restaurant))
