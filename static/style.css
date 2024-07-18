@@ -8,6 +8,26 @@
     box-sizing: border-box; /* Include padding and border in element's total width and height */
     min-height: 100vh; /* Ensure container takes full viewport height */
 }
+#search-box {
+    position: fixed;
+    top: 30px;
+    right: 20px;
+    z-index: 1001; /* Ensure search box stays above other content */
+    width: 300px;
+}
+
+.dropdown-menu {
+    display: none; /* Ensure it's set to display */
+    position: absolute; /* Position it absolutely */
+    z-index: 1002; /* Ensure it's above other content */
+    width: 100%; /* Full width of its container */
+    max-height: 300px; /* Limit the maximum height */
+    overflow-y: auto; /* Enable scrolling if content exceeds height */
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
 
 .restaurant-box {
     flex: 0 0 calc(33.33% - 30px); /* Three boxes per row with margin */
@@ -92,4 +112,8 @@
 .page-link.next {
     color: #170102; /* Red color for arrows */
     font-weight: bold; /* Bold font for arrows */
+}
+
+h5{
+    margin-top: 5px;
 }

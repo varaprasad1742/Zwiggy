@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zomato</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
     <script src="{{ url_for('static', path='script.js') }}"></script>
     <style>
@@ -25,7 +26,17 @@
 </head>
 <body> 
     <div id="zomato-logo"></div>
-
+    <div id="search-box">
+        <form id="search-form">
+            <div class="input-group">
+                <input type="text" id="search-input" class="form-control" placeholder="Search restaurants">
+                <div class="input-group-append">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+            <div id="search-results" class="dropdown-menu" aria-labelledby="dropdownMenuButton"></div>
+        </form>
+    </div>
     <div class="container">
         <div id="restaurant-list" class="row"></div>
         <nav>

@@ -5,40 +5,11 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, scoped_session
-import requests
-from PIL import Image
-import os
 
 
-def download_image(restaurant_name):
-    # Replace spaces in restaurant name with underscores for URL compatibility
-    restaurant_name = restaurant_name.replace(' ', '_')
-    # Example URL for image search based on restaurant name
-    search_url = f"https://example.com/images/search/{restaurant_name}"
-    
-    try:
-        response = requests.get(search_url, timeout=10)
-        if response.status_code == 200:
-            # Create 'images' folder if it doesn't exist
-            if not os.path.exists('images'):
-                os.makedirs('images')
-            
-            # Save image to 'images' folder
-            with open(f'images/{restaurant_name}.jpg', 'wb') as f:
-                f.write(response.content)
-            
-            return f'images/{restaurant_name}.jpg'
-        else:
-            return None
-    except Exception as e:
-        print(f"Error downloading image: {e}")
-        return None
-
-
-
-engine = create_engine("mysql+pymysql://root:password@localhost/TypeFace")
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-db = scoped_session(SessionLocal)
+engine = create_engine("mysql+pymysql://root:password@localhost/TypeFace") # pymysql is the driver to connect mysql
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine) # sessionmaker is a factory for making session classes
+db = scoped_session(SessionLocal) # scoped_session is a thread-local object that represents a registry of database sessions
 
 app = FastAPI()
 
@@ -80,11 +51,26 @@ async def restaurant(request: Request,id: int, db=Depends(get_db),response_class
 
 @app.get("/all_restaurants")
 async def all_restaurants(page: int = Query(1, ge=1), db=Depends(get_db)):
-    offset = (page - 1) * 20
-    result = db.execute(text("SELECT id,Restaurant_Name, Address, Has_Online_delivery FROM zomato LIMIT 20 OFFSET :offset"), {"offset": offset})
+    offset = (page - 1) * 50
+    result = db.execute(text("SELECT id,Restaurant_Name, Address, Has_Online_delivery FROM zomato LIMIT 50 OFFSET :offset"), {"offset": offset})
     restaurants = result.fetchall()
     # print(restaurants)
     return [dict(zip(result.keys(), restaurant)) for restaurant in restaurants]
+
+
+@app.get("/search")
+async def search_restaurants(query: str = Query(...), db=Depends(get_db)):
+    try:
+        result = db.execute(
+            text("SELECT id, Restaurant_Name, Aggregate_rating FROM zomato WHERE Restaurant_Name LIKE :query LIMIT 5"),
+            {"query": f"{query}%"} # % is a wildcard character in MySQL
+        )
+        restaurants = result.fetchall()
+        # print(restaurants)
+        return [dict(zip(result.keys(), restaurant)) for restaurant in restaurants]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/restaurants_count")
 async def restaurants_count(db=Depends(get_db)):

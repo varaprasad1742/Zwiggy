@@ -32,6 +32,19 @@ async function fetchRestaurantCount() {
     }
 }
 
+async function searchRestaurants(query) {
+    try {
+        const response = await fetch(`${apiUrl}/search?query=${query}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
+        }
+        const results = await response.json();
+        displaySearchResults(results);
+    } catch (error) {
+        console.error('Error searching restaurants:', error);
+    }
+}
+
 function displayRestaurants(restaurants) {
     const restaurantList = document.getElementById('restaurant-list');
     restaurantList.innerHTML = ''; // Clear previous content
@@ -52,7 +65,6 @@ function displayRestaurants(restaurants) {
             `;
             restaurantDiv.addEventListener('click', () => {
                 window.location.href = `/restaurant_id/${restaurant.id}`;
-
             });
             restaurantList.appendChild(restaurantDiv);
         }, index * 100); // Adjust timing for smoother effect
@@ -114,7 +126,44 @@ function setupPagination(totalPages) {
     }
 }
 
+function displaySearchResults(results) {
+    const searchResults = document.getElementById('search-results');
+    searchResults.innerHTML = ''; // Clear previous content
+    console.log(results);
+    searchResults.style.display = 'block';
+    results.forEach((restaurant) => {
+        const dropdownItem = document.createElement('a');
+        dropdownItem.classList.add('dropdown-item');
+        dropdownItem.href = `/restaurant_id/${restaurant.id}`;
+        dropdownItem.textContent =restaurant.Restaurant_Name+", Rating:"+restaurant.Aggregate_rating+"*";
+        dropdownItem.addEventListener('click', () => {
+            window.location.href = dropdownItem.href;
+        });
+        console.log(restaurant.Restaurant_Name);
+        searchResults.appendChild(dropdownItem);
+    });
+
+    if (results.length === 0) {
+        const dropdownItem = document.createElement('div');
+        dropdownItem.classList.add('dropdown-item', 'text-muted');
+        dropdownItem.textContent = 'No results found';
+        searchResults.appendChild(dropdownItem);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchRestaurants(currentPage);
     fetchRestaurantCount();
+
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('input', (event) => {
+        const query = event.target.value.trim();
+        if (query.length > 0) {
+            searchRestaurants(query);
+        } else {
+            const searchResults = document.getElementById('search-results');
+            searchResults.innerHTML = ''; // Clear dropdown if input is empty
+            searchResults.style.display = 'none';
+        }
+    });
 });
