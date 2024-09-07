@@ -1,6 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/ErQVLbmr)
-# Project Assignment: Zomato Restaurant Listing & Searching
- 
 ## Key Use Cases
  
 ### Data Loading
@@ -16,10 +13,4 @@ Develop a web application with the following pages, which must connect to the we
   - **Restaurant List Page**: Display a list of restaurants. Clicking on a restaurant should navigate the user to the restaurant's detail page.
   - **Restaurant Detail Page**: Show details of a specific restaurant.
  
-## Additional Use Cases (Optional)
-If time allows, implement the following additional features, ensuring they are supported in both the API and the UI:
-- **Filtering Options**:
-  - By Country
-  - By Average Spend for Two People
-  - By Cuisines
-- **Search Functionality**: Enable search for restaurants by name and description.
+**Search Functionality**: Enable search for restaurants by name and description.
