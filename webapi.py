@@ -5,7 +5,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, scoped_session
-
+import random
 
 engine = create_engine("mysql+pymysql://root:password@localhost:3306/TypeFace") # pymysql is the driver to connect mysql
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine) # sessionmaker is a factory for making session classes
@@ -21,6 +21,34 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+cache = {}
+cache_limit = 10
+ip = ["193.0.0.1","208.20.36.25","10.0.8.0"]
+
+
+def free_cache():
+    cache_to_remove = 2
+    cache_items = sorted(cache.items(),key = lambda x: x[1][1])
+    for i in cache_items[-cache_to_remove:]:
+        cache.pop(i[0])
+    
+
+
+def check_cache(key):
+    print("Key:",key)
+    if key in cache.keys():
+        print("Cache has key")
+        cache[key][1] += 1
+        print("Response is sent from cache")
+        return cache[key][0],True
+    return "",False
+
+def update_cache(key,response):
+    if len(cache.keys())==cache_limit:
+        free_cache()
+    print("Cache has no key")
+    cache[key] = [response,1]
+    print("Cache has been updated successfully!!!")
 
 templates = Jinja2Templates(directory="ui")
 
@@ -42,12 +70,29 @@ def get_db():
 
 @app.get("/restaurant_id/{id}")
 async def restaurant(request: Request,id: int, db=Depends(get_db),response_class=HTMLResponse):
+    # key = random.choice(ip)+"/restaurant_id/"+str(id)
+    header = request.headers
+    key = header['host']+"/restaurant_id/"+str(id)
+    response,exist = check_cache(key)
+    if exist:
+        return response
     result = db.execute(text("SELECT * FROM zomato WHERE id = :id"), {"id": id})
     restaurant = result.fetchone()
     if not restaurant:
         raise HTTPException(status_code=404, detail="Restaurant not found")
-    restaurant_dict = {key: value for key, value in zip(result.keys(), restaurant)}
-    return templates.TemplateResponse("restaurant.html", {"restaurant": restaurant_dict, "request": request})
+    response = {key: value for key, value in zip(result.keys(), restaurant)}
+    response["cache_key"] = key
+    update_cache(key,response)
+    return response
+
+
+
+    # result = db.execute(text("SELECT * FROM zomato WHERE id = :id"), {"id": id})
+    # restaurant = result.fetchone()
+    # if not restaurant:
+    #     raise HTTPException(status_code=404, detail="Restaurant not found")
+    # restaurant_dict = {key: value for key, value in zip(result.keys(), restaurant)}
+    # return templates.TemplateResponse("restaurant.html", {"restaurant": restaurant_dict, "request": request})
 
 @app.get("/all_restaurants")
 async def all_restaurants(page: int = Query(1, ge=1), db=Depends(get_db)):
